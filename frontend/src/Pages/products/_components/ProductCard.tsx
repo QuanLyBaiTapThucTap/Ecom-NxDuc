@@ -1,4 +1,5 @@
 import type { Product } from "@/Pages/products/_types/product";
+import { useCart } from "@/Pages/cart/_hooks/useCart";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,8 @@ const categoryLabels: Record<string, string> = {
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
   const rating = product.rating?.rate ?? 0;
   const ratingCount = product.rating?.count ?? 0;
 
@@ -20,7 +23,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <article className="group overflow-hidden rounded-xl bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      {/* Image */}
+      {/* IMAGE */}
       <div className="relative flex h-[220px] items-center justify-center overflow-hidden bg-[#f7f7f7]">
         <img
           src={product.image}
@@ -29,12 +32,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
           className="h-full w-full object-contain p-5 transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Sale */}
+        {/* SALE */}
         <span className="absolute left-3 top-3 rounded-md bg-red-500 px-2 py-1 text-[10px] font-bold uppercase text-white">
           Sale
         </span>
 
-        {/* Wishlist */}
+        {/* WISHLIST */}
         <button
           type="button"
           aria-label={`Add ${product.title} to wishlist`}
@@ -44,19 +47,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </button>
       </div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="p-4">
-        {/* Category */}
+        {/* CATEGORY */}
         <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
           {category}
         </p>
 
-        {/* Title */}
+        {/* TITLE */}
         <h3 className="mt-1 line-clamp-2 min-h-[40px] text-sm font-semibold leading-5 text-gray-900">
           {product.title}
         </h3>
 
-        {/* Rating */}
+        {/* RATING */}
         <div className="mt-2 flex items-center gap-1">
           <span className="text-xs text-yellow-500">
             {"★".repeat(Math.round(rating))}
@@ -70,7 +73,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-[11px] text-gray-400">({ratingCount})</span>
         </div>
 
-        {/* Price */}
+        {/* PRICE */}
         <div className="mt-2 flex items-center gap-2">
           <span className="text-lg font-black text-gray-900">
             ${product.price.toFixed(2)}
@@ -80,6 +83,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ${(product.price * 1.2).toFixed(2)}
           </span>
         </div>
+
+        {/* ADD TO CART */}
+        <button
+          type="button"
+          onClick={() => addToCart(product)}
+          className="mt-4 h-10 w-full rounded-lg bg-black text-xs font-semibold text-white transition hover:bg-gray-800 active:scale-[0.98]"
+        >
+          Add to Cart
+        </button>
       </div>
     </article>
   );

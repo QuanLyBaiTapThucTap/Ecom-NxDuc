@@ -110,3 +110,119 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+@keyframes brand-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.brand-marquee {
+  animation: brand-marquee 28s linear infinite;
+}
+
+.brand-marquee:hover {
+  animation-play-state: paused;
+}
+.featured-product {
+  flex-basis: 0;
+}
+
+.group\/showcase:hover .featured-product {
+  flex: 2;
+}
+
+.group\/showcase .featured-product:hover {
+  flex: 4;
+}
+
+.group\/showcase .featured-product:first-child {
+  flex: 4;
+}
+
+.group\/showcase:hover .featured-product:first-child {
+  flex: 2;
+}
+
+.group\/showcase .featured-product:first-child:hover {
+  flex: 4;
+}
+.featured-item {
+  flex: 2;
+  flex-basis: 0;
+  transition: flex 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.featured-item.is-featured {
+  flex: 4;
+}
+
+/* Khi hover vào toàn bộ showcase,
+   tất cả sản phẩm trở về kích thước nhỏ */
+.featured-showcase:hover .featured-item {
+  flex: 2;
+}
+
+/* Sản phẩm đang hover phóng to */
+.featured-showcase:hover .featured-item:hover {
+  flex: 4;
+}
+
+/* ----------------------------- */
+/* IMAGE                         */
+/* ----------------------------- */
+
+.featured-product-image {
+  transform: scale(0.7);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Sản phẩm đầu tiên mặc định lớn */
+.featured-item.is-featured .featured-product-image {
+  transform: scale(1);
+}
+
+/* Khi hover showcase, sản phẩm đầu tiên cũng thu nhỏ */
+.featured-showcase:hover .featured-item.is-featured .featured-product-image {
+  transform: scale(0.7);
+}
+
+/* Sản phẩm đang hover phóng to */
+.featured-showcase:hover .featured-item:hover .featured-product-image {
+  transform: scale(1);
+}
+
+/* ----------------------------- */
+/* PRODUCT INFO                  */
+/* ----------------------------- */
+
+.featured-product-info {
+  transform: translateY(20px);
+  opacity: 0;
+
+  transition:
+    transform 500ms ease,
+    opacity 500ms ease;
+}
+
+/* Sản phẩm đầu tiên hiển thị thông tin mặc định */
+.featured-product-info.featured-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Khi hover vào showcase,
+   thông tin featured cũ biến mất */
+.featured-showcase:hover .featured-item.is-featured .featured-product-info {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+/* Hiện thông tin sản phẩm đang hover */
+.featured-showcase:hover .featured-item:hover .featured-product-info {
+  transform: translateY(0);
+  opacity: 1;
+}

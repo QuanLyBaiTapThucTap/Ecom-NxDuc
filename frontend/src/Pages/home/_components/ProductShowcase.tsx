@@ -552,6 +552,22 @@ const ShowcaseProductCard = ({ product }: ShowcaseProductCardProps) => {
             Đã bán {sold} sản phẩm
           </p>
         </div>
+        {/* ================= ACTIONS ================= */}
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            className="flex h-9 items-center justify-center rounded-lg border border-gray-900 bg-white px-2 text-[10px] font-bold text-gray-900 transition hover:bg-gray-100 sm:text-[11px]"
+          >
+            🛒 Thêm vào giỏ
+          </button>
+
+          <button
+            type="button"
+            className="flex h-9 items-center justify-center rounded-lg bg-gray-900 px-2 text-[10px] font-bold text-white transition hover:bg-black sm:text-[11px]"
+          >
+            Mua ngay
+          </button>
+        </div>
       </div>
     </article>
   );
