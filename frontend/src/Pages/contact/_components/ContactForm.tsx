@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiRequest } from "@/Services/api";
 
 interface ContactFormData {
   fullName: string;
@@ -26,6 +27,7 @@ const ContactForm = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
     const newErrors: FormErrors = {};
@@ -85,16 +87,14 @@ const ContactForm = () => {
     try {
       setIsSubmitting(true);
 
-      // Fake API request
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-
-      console.log("Contact form submitted:", form);
+      setSubmitError("");
+      await apiRequest("/contacts", { method: "POST", body: JSON.stringify(form) });
 
       setSubmitted(true);
       setForm(initialForm);
       setErrors({});
     } catch (error) {
-      console.error("Failed to send message:", error);
+      setSubmitError(error instanceof Error ? error.message : "Unable to send message.");
     } finally {
       setIsSubmitting(false);
     }
@@ -113,6 +113,7 @@ const ContactForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="space-y-5 px-6 py-6">
+          {submitError && <p role="alert" className="text-red-600">{submitError}</p>}
           {/* SUCCESS */}
           {submitted && (
             <div className="flex items-start gap-3 rounded-lg border border-green-100 bg-green-50 px-4 py-3">

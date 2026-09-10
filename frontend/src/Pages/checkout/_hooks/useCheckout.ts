@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import type { CheckoutFormData, CheckoutOrder } from "../_types/checkout";
 
@@ -6,6 +6,8 @@ import {
   validateCheckout,
   type CheckoutErrors,
 } from "../_schema/checkoutSchema";
+
+import { checkoutService } from "../_services/checkoutService";
 
 const initialForm: CheckoutFormData = {
   fullName: "",
@@ -26,6 +28,9 @@ export const useCheckout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const requestId = useRef(crypto.randomUUID());
+  const submitting = useRef(false);
 
   const updateField = <K extends keyof CheckoutFormData>(
     field: K,
@@ -51,23 +56,25 @@ export const useCheckout = () => {
   };
 
   const submitOrder = async (order: CheckoutOrder) => {
-    if (!validate()) {
+    if (submitting.current || !validate()) {
       return false;
     }
 
     try {
+      submitting.current = true;
       setIsSubmitting(true);
+      setSubmitError("");
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 1200);
-      });
-
-      console.log("Checkout order:", order);
+      await checkoutService.createOrder(order, requestId.current);
 
       setIsSuccess(true);
 
       return true;
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Unable to place order.");
+      return false;
     } finally {
+      submitting.current = false;
       setIsSubmitting(false);
     }
   };
@@ -80,6 +87,7 @@ export const useCheckout = () => {
     hasErrors,
     isSubmitting,
     isSuccess,
+    submitError,
     updateField,
     submitOrder,
   };

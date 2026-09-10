@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { authService } from "../_services/authService";
 
 interface FormErrors {
   name?: string;
@@ -10,6 +12,8 @@ interface FormErrors {
 }
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,19 +78,12 @@ const RegisterForm = () => {
     try {
       setIsSubmitting(true);
 
-      const registerData = {
+      await authService.register({
         name: name.trim(),
         email: email.trim(),
         password,
-      };
-
-      console.log("Register data:", registerData);
-
-      /*
-       * Sau này kết nối API:
-       *
-       * await authService.register(registerData);
-       */
+      });
+      navigate("/login", { state: location.state });
     } catch (error) {
       console.error("Register error:", error);
 
@@ -417,7 +414,7 @@ const RegisterForm = () => {
           <button
             type="button"
             onClick={() => {
-              window.location.href = "/login";
+              navigate("/login", { state: location.state });
             }}
             className="font-semibold text-gray-900 underline underline-offset-2 transition hover:text-gray-500"
           >

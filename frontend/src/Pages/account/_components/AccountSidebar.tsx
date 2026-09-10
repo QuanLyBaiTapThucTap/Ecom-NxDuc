@@ -1,6 +1,8 @@
+import { useAuth } from "@/Pages/auth/useAuth";
 import { Link, useLocation } from "react-router-dom";
 
 const AccountSidebar = () => {
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   const menuItems = [
@@ -32,16 +34,16 @@ const AccountSidebar = () => {
       <div className="border-b border-gray-100 px-5 py-5">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-bold text-white">
-            ND
+            {user?.name.firstname?.slice(0, 1)}
           </div>
 
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-gray-900">
-              Nguyen Duc
+              {user?.name.firstname} {user?.name.lastname}
             </p>
 
             <p className="mt-0.5 truncate text-[11px] text-gray-400">
-              duc@example.com
+              {user?.email}
             </p>
           </div>
         </div>
@@ -78,6 +80,7 @@ const AccountSidebar = () => {
       <div className="border-t border-gray-100 p-2">
         <button
           type="button"
+          onClick={() => void logout()}
           className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-xs font-medium text-gray-500 transition hover:bg-red-50 hover:text-red-500"
         >
           <span className="flex w-5 justify-center text-sm">↪</span>

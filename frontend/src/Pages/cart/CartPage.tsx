@@ -1,144 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import CartItem from "./_components/CartItem";
 import CartSummary from "./_components/CartSummary";
 import EmptyCart from "./_components/EmptyCart";
-
-import type { CartItem as CartItemType } from "./_types/cart";
-
-const fakeCartItems: CartItemType[] = [
-  {
-    product: {
-      id: 1,
-      title: "iPhone 15 Pro Max 256GB",
-      price: 1199.99,
-      description: "Apple iPhone 15 Pro Max",
-      category: "Smartphones",
-      image:
-        "https://images.unsplash.com/photo-1696446701796-da61225697cc?w=600",
-      rating: {
-        rate: 4.8,
-        count: 328,
-      },
-    },
-    quantity: 1,
-    selected: true,
-  },
-  {
-    product: {
-      id: 2,
-      title: "Sony WH-1000XM5 Wireless Headphones",
-      price: 349.99,
-      description: "Premium wireless noise cancelling headphones",
-      category: "Headphones",
-      image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600",
-      rating: {
-        rate: 4.7,
-        count: 215,
-      },
-    },
-    quantity: 2,
-    selected: true,
-  },
-  {
-    product: {
-      id: 3,
-      title: "MacBook Air M3 15-inch",
-      price: 1299.99,
-      description: "Apple MacBook Air with M3 chip",
-      category: "Laptops",
-      image:
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600",
-      rating: {
-        rate: 4.9,
-        count: 486,
-      },
-    },
-    quantity: 1,
-    selected: true,
-  },
-  {
-    product: {
-      id: 4,
-      title: "Nike Air Max 270",
-      price: 149.99,
-      description: "Comfortable everyday sneakers",
-      category: "Shoes",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
-      rating: {
-        rate: 4.6,
-        count: 172,
-      },
-    },
-    quantity: 1,
-    selected: false,
-  },
-];
+import { useCart } from "./_hooks/useCart";
 
 const CartPage = () => {
-  const items = fakeCartItems;
-
-  const selectedItems = items.filter((item) => item.selected);
-
-  const selectedQuantity = selectedItems.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
-
-  const subtotal = selectedItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0,
-  );
-
-  const discount = subtotal * 0.1;
-
-  const shipping = 0;
-
-  const total = subtotal - discount + shipping;
-
-  const allSelected = items.length > 0 && items.every((item) => item.selected);
-
-  const handleToggle = (productId: number) => {
-    const item = items.find((item) => item.product.id === productId);
-
-    if (item) {
-      item.selected = !item.selected;
-    }
-  };
-
-  const handleIncrease = (productId: number) => {
-    const item = items.find((item) => item.product.id === productId);
-
-    if (item) {
-      item.quantity += 1;
-    }
-  };
-
-  const handleDecrease = (productId: number) => {
-    const item = items.find((item) => item.product.id === productId);
-
-    if (item && item.quantity > 1) {
-      item.quantity -= 1;
-    }
-  };
-
-  const handleRemove = (productId: number) => {
-    const index = items.findIndex((item) => item.product.id === productId);
-
-    if (index !== -1) {
-      items.splice(index, 1);
-    }
-  };
-
-  const handleToggleAll = () => {
-    items.forEach((item) => {
-      item.selected = !allSelected;
-    });
-  };
-
-  const handleClearCart = () => {
-    items.splice(0, items.length);
-  };
+  const navigate = useNavigate();
+  const {
+    items,
+    selectedQuantity,
+    subtotal,
+    discount,
+    shipping,
+    total,
+    allSelected,
+    toggleItem: handleToggle,
+    increaseQuantity: handleIncrease,
+    decreaseQuantity: handleDecrease,
+    removeItem: handleRemove,
+    toggleAll: handleToggleAll,
+    clearCart: handleClearCart,
+  } = useCart();
 
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
@@ -246,6 +129,7 @@ const CartPage = () => {
                 selectedQuantity={selectedQuantity}
                 setVoucher={() => {}}
                 applyVoucher={() => {}}
+                onCheckout={() => navigate("/checkout")}
               />
             </div>
           </div>

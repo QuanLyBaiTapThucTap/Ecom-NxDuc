@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 const categories = [
   {
     name: "Gaming",
@@ -42,6 +43,7 @@ const categories = [
 ];
 
 const PopularCategories = () => {
+  const navigate = useNavigate();
   return (
     <section className="border-b bg-white">
       <div className="mx-auto max-w-[1200px] px-4 py-8">
@@ -51,6 +53,7 @@ const PopularCategories = () => {
           {categories.map((category) => (
             <button
               key={category.name}
+              onClick={() => navigate(`/products?${["mobiles", "computers", "televisions", "audios"].includes(category.name.toLowerCase()) ? "category" : "q"}=${encodeURIComponent(category.name.toLowerCase())}`)}
               type="button"
               className="group flex flex-col items-center justify-center gap-3 rounded-lg border bg-white p-4 transition hover:border-black hover:shadow-sm"
             >

@@ -1,5 +1,6 @@
 @import "tailwindcss";
-: root {
+
+:root {
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -18,53 +19,33 @@
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
+
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
+@media (max-width: 1024px) {
+  :root {
     font-size: 16px;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body {
+  margin: 0;
 }
 
 #root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
 }
 
 h1,
@@ -78,20 +59,26 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+
+  h2 {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
@@ -110,6 +97,11 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* ========================================
+   BRAND MARQUEE
+======================================== */
+
 @keyframes brand-marquee {
   from {
     transform: translateX(0);
@@ -127,41 +119,35 @@ code {
 .brand-marquee:hover {
   animation-play-state: paused;
 }
-.featured-product {
-  flex-basis: 0;
+
+/* ========================================
+   FEATURED PRODUCT SHOWCASE
+======================================== */
+
+.featured-showcase {
+  display: flex;
+  overflow: hidden;
 }
 
-.group\/showcase:hover .featured-product {
-  flex: 2;
-}
-
-.group\/showcase .featured-product:hover {
-  flex: 4;
-}
-
-.group\/showcase .featured-product:first-child {
-  flex: 4;
-}
-
-.group\/showcase:hover .featured-product:first-child {
-  flex: 2;
-}
-
-.group\/showcase .featured-product:first-child:hover {
-  flex: 4;
-}
+/* Mặc định mỗi sản phẩm chiếm một phần */
 .featured-item {
   flex: 2;
   flex-basis: 0;
-  transition: flex 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  min-width: 0;
+  position: relative;
+
+  transition:
+    flex 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms ease;
 }
 
+/* Sản phẩm đầu tiên lớn mặc định */
 .featured-item.is-featured {
   flex: 4;
 }
 
-/* Khi hover vào toàn bộ showcase,
-   tất cả sản phẩm trở về kích thước nhỏ */
+/* Khi hover vào showcase,
+   tất cả sản phẩm thu nhỏ */
 .featured-showcase:hover .featured-item {
   flex: 2;
 }
@@ -171,13 +157,16 @@ code {
   flex: 4;
 }
 
-/* ----------------------------- */
-/* IMAGE                         */
-/* ----------------------------- */
+/* ========================================
+   FEATURED IMAGE
+======================================== */
 
 .featured-product-image {
   transform: scale(0.7);
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition:
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease;
 }
 
 /* Sản phẩm đầu tiên mặc định lớn */
@@ -185,7 +174,8 @@ code {
   transform: scale(1);
 }
 
-/* Khi hover showcase, sản phẩm đầu tiên cũng thu nhỏ */
+/* Khi hover showcase,
+   sản phẩm đầu tiên thu nhỏ */
 .featured-showcase:hover .featured-item.is-featured .featured-product-image {
   transform: scale(0.7);
 }
@@ -195,9 +185,9 @@ code {
   transform: scale(1);
 }
 
-/* ----------------------------- */
-/* PRODUCT INFO                  */
-/* ----------------------------- */
+/* ========================================
+   FEATURED PRODUCT INFO
+======================================== */
 
 .featured-product-info {
   transform: translateY(20px);
@@ -208,13 +198,13 @@ code {
     opacity 500ms ease;
 }
 
-/* Sản phẩm đầu tiên hiển thị thông tin mặc định */
+/* Sản phẩm đầu tiên hiển thị thông tin */
 .featured-product-info.featured-visible {
   transform: translateY(0);
   opacity: 1;
 }
 
-/* Khi hover vào showcase,
+/* Khi hover showcase,
    thông tin featured cũ biến mất */
 .featured-showcase:hover .featured-item.is-featured .featured-product-info {
   transform: translateY(20px);
@@ -225,4 +215,34 @@ code {
 .featured-showcase:hover .featured-item:hover .featured-product-info {
   transform: translateY(0);
   opacity: 1;
+}
+
+/* ========================================
+   CART ANIMATION
+======================================== */
+
+@keyframes cartBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.3) rotate(-8deg);
+  }
+
+  50% {
+    transform: scale(0.9) rotate(8deg);
+  }
+
+  75% {
+    transform: scale(1.15) rotate(-4deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.cart-bounce {
+  animation: cartBounce 500ms ease;
 }

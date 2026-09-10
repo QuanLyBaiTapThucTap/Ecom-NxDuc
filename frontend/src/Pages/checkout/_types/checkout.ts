@@ -23,6 +23,7 @@ export interface CheckoutOrderItem {
 }
 
 export interface CheckoutOrder {
+  voucher?: string | null;
   items: CheckoutOrderItem[];
   shipping: ShippingInformation;
   paymentMethod: PaymentMethod;

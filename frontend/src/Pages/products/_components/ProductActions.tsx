@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { analyticsService } from "@/Services/analyticsService";
 import type { Product } from "../_types/product";
+import { useCart } from "@/Pages/cart/_hooks/useCart";
 
 interface ProductActionsProps {
   product: Product;
@@ -13,6 +15,8 @@ const ProductActions = ({
   quantity,
   onQuantityChange,
 }: ProductActionsProps) => {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
 
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
@@ -39,6 +43,14 @@ const ProductActions = ({
       return;
     }
 
+    for (let index = 0; index < quantity; index += 1) {
+      addToCart(product);
+
+      analyticsService.track("ADD_TO_CART", {
+        productId: product.id,
+      });
+    }
+
     setAddedToCart(true);
 
     window.setTimeout(() => {
@@ -51,11 +63,15 @@ const ProductActions = ({
       return;
     }
 
-    console.log("Buy now:", {
-      productId: product.id,
-      quantity,
-      totalPrice,
-    });
+    for (let index = 0; index < quantity; index += 1) {
+      addToCart(product);
+
+      analyticsService.track("ADD_TO_CART", {
+        productId: product.id,
+      });
+    }
+
+    navigate("/cart");
   };
 
   return (

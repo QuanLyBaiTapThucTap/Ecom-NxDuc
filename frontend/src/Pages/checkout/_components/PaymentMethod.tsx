@@ -48,6 +48,7 @@ const PaymentMethod = ({ value, onChange }: PaymentMethodProps) => {
             <button
               key={method.value}
               type="button"
+              disabled={method.value !== "cod"}
               onClick={() => onChange(method.value)}
               className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left transition ${
                 selected
@@ -71,7 +72,7 @@ const PaymentMethod = ({ value, onChange }: PaymentMethodProps) => {
                 </span>
 
                 <span className="mt-0.5 block text-[10px] text-gray-400">
-                  {method.description}
+                  {method.value === "cod" ? method.description : "Currently unavailable"}
                 </span>
               </span>
             </button>

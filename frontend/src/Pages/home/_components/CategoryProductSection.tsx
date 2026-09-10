@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Product } from "@/Pages/products/_types/product";
 import ProductCard from "../../products/_components/ProductCard";
 
@@ -14,6 +15,7 @@ const CategoryProductSection = ({
   products,
   categories = [],
 }: CategoryProductSectionProps) => {
+  const navigate = useNavigate();
   return (
     <section className="mx-auto mt-10 w-full max-w-[1200px] px-4">
       {/* TITLE */}
@@ -22,6 +24,7 @@ const CategoryProductSection = ({
 
         <button
           type="button"
+          onClick={() => navigate(products[0] ? `/products?category=${encodeURIComponent(products[0].category)}` : "/products")}
           className="text-sm font-medium text-gray-500 transition hover:text-red-500"
         >
           Xem tất cả →
@@ -48,6 +51,7 @@ const CategoryProductSection = ({
                 {categories.map((category) => (
                   <button
                     key={category}
+                    onClick={() => navigate(`/products?q=${encodeURIComponent(category)}`)}
                     type="button"
                     className="whitespace-nowrap text-sm font-medium text-gray-600 transition hover:text-red-500"
                   >

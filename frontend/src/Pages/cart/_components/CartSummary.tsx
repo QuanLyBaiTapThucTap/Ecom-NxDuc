@@ -8,6 +8,7 @@ interface CartSummaryProps {
   selectedQuantity: number;
   setVoucher: (value: string) => void;
   applyVoucher: () => void;
+  onCheckout: () => void;
 }
 
 const CartSummary = ({
@@ -20,6 +21,7 @@ const CartSummary = ({
   selectedQuantity,
   setVoucher,
   applyVoucher,
+  onCheckout,
 }: CartSummaryProps) => {
   const isInvalidVoucher =
     voucher.trim().length > 0 &&
@@ -137,6 +139,7 @@ const CartSummary = ({
       <button
         type="button"
         disabled={selectedQuantity === 0}
+        onClick={onCheckout}
         className="mt-6 h-11 w-full rounded-lg bg-black text-xs font-semibold text-white transition hover:bg-gray-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
       >
         Proceed to Checkout

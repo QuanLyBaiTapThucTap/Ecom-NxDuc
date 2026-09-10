@@ -1,4 +1,4 @@
-import type { CheckoutErrors, CheckoutFormData } from "../_types/checkout";
+import type { CheckoutFormData } from "../_types/checkout";
 
 interface ShippingFormProps {
   form: CheckoutFormData;

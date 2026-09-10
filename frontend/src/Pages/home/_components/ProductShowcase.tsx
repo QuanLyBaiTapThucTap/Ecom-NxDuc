@@ -1,7 +1,10 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { useProducts } from "@/Pages/products/_hooks/useProducts";
 import type { Product } from "@/Pages/products/_types/product";
+import { useCart } from "@/Pages/cart/_hooks/useCart";
+import { animateProductToCart } from "@/Pages/cart/_utils/cartAnimation";
 
 type ShowcaseTab =
   | "best-seller"
@@ -64,10 +67,6 @@ const ProductShowcase = () => {
     }
 
     switch (activeTab) {
-      /*
-       * BEST SELLER
-       * Ưu tiên rating cao + nhiều lượt đánh giá
-       */
       case "best-seller":
         return [...products]
           .sort((a, b) => {
@@ -84,10 +83,6 @@ const ProductShowcase = () => {
           })
           .slice(0, 5);
 
-      /*
-       * SUGGEST TODAY
-       * Rating tốt + giá dễ tiếp cận
-       */
       case "suggest-today":
         return [...products]
           .sort((a, b) => {
@@ -101,21 +96,12 @@ const ProductShowcase = () => {
           })
           .slice(0, 5);
 
-      /*
-       * BEST SELLING SPEAKERS
-       * Lấy sản phẩm thuộc category "audios"
-       */
       case "speakers":
         return products
           .filter((product) => product.category === "audios")
           .sort((a, b) => (b.rating?.count ?? 0) - (a.rating?.count ?? 0))
           .slice(0, 5);
 
-      /*
-       * JUST LANDING
-       * Dataset chưa có createdAt
-       * => dùng ID lớn nhất làm sản phẩm mới
-       */
       case "just-landing":
         return [...products].sort((a, b) => b.id - a.id).slice(0, 5);
 
@@ -189,13 +175,13 @@ const ProductShowcase = () => {
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            to="/products"
             className="hidden items-center gap-2 text-sm font-semibold text-gray-600 transition hover:text-black sm:flex"
           >
             Xem tất cả
             <span className="text-lg">→</span>
-          </button>
+          </Link>
         </div>
 
         {/* ================= SHOWCASE ================= */}
@@ -231,8 +217,6 @@ const ProductShowcase = () => {
 
           <div className="border-b border-gray-100 p-3 sm:p-5">
             <div className="flex items-center gap-2">
-              {/* Previous */}
-
               <button
                 type="button"
                 onClick={handlePrevious}
@@ -241,8 +225,6 @@ const ProductShowcase = () => {
               >
                 ←
               </button>
-
-              {/* Tab list */}
 
               <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto scrollbar-none">
                 {tabs.map((tab) => {
@@ -276,8 +258,6 @@ const ProductShowcase = () => {
                   );
                 })}
               </div>
-
-              {/* Next */}
 
               <button
                 type="button"
@@ -318,8 +298,6 @@ const ProductShowcase = () => {
             key={activeTab}
             className="animate-[showcaseIn_0.35s_ease-out] px-4 pb-4 pt-5 sm:px-6"
           >
-            {/* Loading */}
-
             {loading && (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
                 {Array.from({ length: 5 }).map((_, index) => (
@@ -331,19 +309,14 @@ const ProductShowcase = () => {
 
                     <div className="space-y-3 p-3">
                       <div className="h-3 w-1/3 animate-pulse rounded bg-gray-100" />
-
                       <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-
                       <div className="h-4 w-2/3 animate-pulse rounded bg-gray-100" />
-
                       <div className="h-5 w-1/2 animate-pulse rounded bg-gray-100" />
                     </div>
                   </div>
                 ))}
               </div>
             )}
-
-            {/* Error */}
 
             {!loading && error && (
               <div className="flex min-h-[300px] items-center justify-center">
@@ -358,8 +331,6 @@ const ProductShowcase = () => {
                 </div>
               </div>
             )}
-
-            {/* Empty */}
 
             {!loading && !error && showcaseProducts.length === 0 && (
               <div className="flex min-h-[300px] items-center justify-center">
@@ -376,8 +347,6 @@ const ProductShowcase = () => {
                 </div>
               </div>
             )}
-
-            {/* Products */}
 
             {!loading && !error && showcaseProducts.length > 0 && (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
@@ -407,8 +376,6 @@ const ProductShowcase = () => {
           </div>
         </div>
       </div>
-
-      {/* ================= ANIMATION ================= */}
 
       <style>
         {`
@@ -447,52 +414,48 @@ interface ShowcaseProductCardProps {
 }
 
 const ShowcaseProductCard = ({ product }: ShowcaseProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const productImageRef = useRef<HTMLImageElement>(null);
+
   const rating = product.rating?.rate ?? 0;
   const ratingCount = product.rating?.count ?? 0;
 
-  /*
-   * Demo data:
-   * Giá cũ cao hơn 20% để tạo hiệu ứng sale.
-   */
   const oldPrice = product.price * 1.2;
 
-  /*
-   * Demo số lượng đã bán dựa trên số lượt đánh giá.
-   */
   const sold = Math.min(Math.max(Math.round(ratingCount / 5), 12), 99);
 
   const category = categoryLabels[product.category] ?? product.category;
 
   const roundedRating = Math.round(rating);
 
+  /* ================= ADD TO CART ================= */
+
+  const handleAddToCart = () => {
+    addToCart(product);
+
+    animateProductToCart(product.image, productImageRef.current);
+  };
+
   return (
     <article className="group min-w-0 overflow-hidden rounded-xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
       {/* ================= IMAGE ================= */}
 
-      <div className="relative flex h-[190px] items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] sm:h-[210px]">
-        <img
-          src={product.image}
-          alt={product.title}
-          loading="lazy"
-          className="h-full w-full object-contain p-5 transition duration-500 group-hover:scale-105"
-        />
+      <Link to={`/products/${product.id}`} className="block">
+        <div className="relative flex h-[190px] items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] sm:h-[210px]">
+          <img
+            ref={productImageRef}
+            src={product.image}
+            alt={product.title}
+            loading="lazy"
+            className="h-full w-full object-contain p-5 transition duration-500 group-hover:scale-105"
+          />
 
-        {/* Sale */}
-
-        <span className="absolute left-3 top-3 rounded-md bg-red-500 px-2 py-1 text-[10px] font-bold uppercase text-white">
-          Sale
-        </span>
-
-        {/* Wishlist */}
-
-        <button
-          type="button"
-          aria-label={`Add ${product.title} to wishlist`}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-lg text-gray-500 shadow-sm transition hover:text-red-500"
-        >
-          ♡
-        </button>
-      </div>
+          <span className="absolute left-3 top-3 rounded-md bg-red-500 px-2 py-1 text-[10px] font-bold uppercase text-white">
+            Sale
+          </span>
+        </div>
+      </Link>
 
       {/* ================= INFO ================= */}
 
@@ -505,9 +468,11 @@ const ShowcaseProductCard = ({ product }: ShowcaseProductCardProps) => {
 
         {/* Product name */}
 
-        <h4 className="mt-1 line-clamp-2 min-h-[40px] text-sm font-semibold leading-5 text-gray-900">
-          {product.title}
-        </h4>
+        <Link to={`/products/${product.id}`} className="block">
+          <h4 className="mt-1 min-h-[40px] line-clamp-2 text-sm font-semibold leading-5 text-gray-900 transition hover:text-gray-500">
+            {product.title}
+          </h4>
+        </Link>
 
         {/* Rating */}
 
@@ -541,7 +506,7 @@ const ShowcaseProductCard = ({ product }: ShowcaseProductCardProps) => {
         <div className="mt-3">
           <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
             <div
-              className="h-full rounded-full bg-gray-900"
+              className="h-full rounded-full bg-gray-900 transition-all duration-700"
               style={{
                 width: `${sold}%`,
               }}
@@ -552,21 +517,28 @@ const ShowcaseProductCard = ({ product }: ShowcaseProductCardProps) => {
             Đã bán {sold} sản phẩm
           </p>
         </div>
+
         {/* ================= ACTIONS ================= */}
+
         <div className="mt-3 grid grid-cols-2 gap-2">
+          {/* ADD TO CART */}
+
           <button
             type="button"
-            className="flex h-9 items-center justify-center rounded-lg border border-gray-900 bg-white px-2 text-[10px] font-bold text-gray-900 transition hover:bg-gray-100 sm:text-[11px]"
+            onClick={handleAddToCart}
+            className="flex h-9 items-center justify-center rounded-lg border border-gray-900 bg-white px-2 text-[10px] font-bold text-gray-900 transition hover:bg-gray-100 active:scale-95 sm:text-[11px]"
           >
             🛒 Thêm vào giỏ
           </button>
 
-          <button
-            type="button"
-            className="flex h-9 items-center justify-center rounded-lg bg-gray-900 px-2 text-[10px] font-bold text-white transition hover:bg-black sm:text-[11px]"
+          {/* BUY NOW */}
+
+          <Link
+            to={`/products/${product.id}`}
+            className="flex h-9 items-center justify-center rounded-lg bg-gray-900 px-2 text-[10px] font-bold text-white transition hover:bg-black active:scale-95 sm:text-[11px]"
           >
             Mua ngay
-          </button>
+          </Link>
         </div>
       </div>
     </article>

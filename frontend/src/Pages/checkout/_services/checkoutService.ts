@@ -1,15 +1,7 @@
+import { apiRequest } from "@/Services/api";
 import type { CheckoutOrder } from "../_types/checkout";
-
-const createOrder = async (order: CheckoutOrder): Promise<CheckoutOrder> => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1200);
-  });
-
-  console.log("Order created:", order);
-
-  return order;
-};
-
+export interface SavedOrder extends CheckoutOrder { id: number; createdAt: string; status: string; paymentStatus: string; }
 export const checkoutService = {
-  createOrder,
+ createOrder: (order: CheckoutOrder, requestId: string) => apiRequest<SavedOrder>("/orders", {method:"POST",body:JSON.stringify({...order,requestId})}),
+ getOrders: () => apiRequest<SavedOrder[]>("/orders"),
 };

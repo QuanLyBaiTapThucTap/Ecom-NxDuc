@@ -1,6 +1,6 @@
 import CheckoutProductItem from "./CheckoutProductItem";
 
-import type { CheckoutFormData, CheckoutOrderItem } from "../_types/checkout";
+import type { CheckoutOrderItem } from "../_types/checkout";
 
 interface CheckoutOrderSummaryProps {
   items: CheckoutOrderItem[];
@@ -8,7 +8,6 @@ interface CheckoutOrderSummaryProps {
   discount: number;
   shippingFee: number;
   total: number;
-  form: CheckoutFormData;
   isSubmitting: boolean;
   onSubmit: () => void;
 }
@@ -19,7 +18,6 @@ const CheckoutOrderSummary = ({
   discount,
   shippingFee,
   total,
-  form,
   isSubmitting,
   onSubmit,
 }: CheckoutOrderSummaryProps) => {

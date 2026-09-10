@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
+
+import { analyticsService } from "@/Services/analyticsService";
 
 import { useProducts } from "./_hooks/useProducts";
 import { useProductDetail } from "./_hooks/useProductDetail";
 
+import ProductGallery from "./_components/ProductGallery";
 import ProductDetailHeader from "./_components/ProductDetailHeader";
 import ProductTechnicalInfo from "./_components/ProductTechnicalInfo";
 import ProductDescription from "./_components/ProductDescription";
@@ -19,37 +23,54 @@ import type { PaymentMethod } from "./_types/payment";
 
 const ProductDetailPage = () => {
   const { product, loading, error } = useProductDetail();
+  useEffect(() => {
+    if (!product) {
+      return;
+    }
+
+    analyticsService.track("PRODUCT_VIEW", {
+      productId: product.id,
+    });
+  }, [product]);
+
   const { products } = useProducts();
 
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedStorage, setSelectedStorage] = useState("");
   const [selectedRam, setSelectedRam] = useState("");
   const [selectedVersion, setSelectedVersion] = useState("");
-
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("cod");
-
   const [quantity, setQuantity] = useState(1);
+
+  /* ============================================================
+     LOADING
+  ============================================================ */
 
   if (loading) {
     return (
-      <div className="min-h-[500px] bg-[#f7f7f7]">
-        <div className="mx-auto w-full max-w-[1200px] px-4 py-10">
+      <div className="min-h-[600px] bg-[#f7f7f7]">
+        <div className="mx-auto w-full max-w-[1200px] px-4 py-8">
           <div className="animate-pulse">
-            <div className="h-5 w-64 rounded bg-gray-200" />
+            {/* Breadcrumb */}
+            <div className="h-3 w-64 rounded bg-gray-200" />
 
-            <div className="mt-2 h-3 w-96 rounded bg-gray-200" />
+            {/* Main layout */}
+            <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {/* Left */}
+              <div className="space-y-5">
+                <div className="h-[420px] rounded-xl bg-gray-200" />
 
-            <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-              <div className="space-y-4">
-                <div className="h-8 w-3/4 rounded bg-gray-200" />
-                <div className="h-24 rounded bg-gray-200" />
-                <div className="h-52 rounded bg-gray-200" />
+                <div className="h-48 rounded-xl bg-gray-200" />
+
+                <div className="h-52 rounded-xl bg-gray-200" />
               </div>
 
+              {/* Right */}
               <div className="space-y-4">
                 <div className="h-48 rounded-xl bg-gray-200" />
+                <div className="h-36 rounded-xl bg-gray-200" />
                 <div className="h-40 rounded-xl bg-gray-200" />
-                <div className="h-48 rounded-xl bg-gray-200" />
+                <div className="h-52 rounded-xl bg-gray-200" />
               </div>
             </div>
           </div>
@@ -58,105 +79,126 @@ const ProductDetailPage = () => {
     );
   }
 
+  /* ============================================================
+     ERROR
+  ============================================================ */
+
   if (error) {
     return (
-      <div className="min-h-[500px] bg-[#f7f7f7]">
-        <div className="mx-auto flex min-h-[500px] w-full max-w-[1200px] items-center justify-center px-4">
-          <div className="text-center">
-            <div className="text-4xl">⚠️</div>
+      <div className="flex min-h-[600px] items-center justify-center bg-[#f7f7f7] px-4">
+        <div className="text-center">
+          <div className="text-4xl">⚠️</div>
 
-            <h1 className="mt-3 text-lg font-bold text-gray-900">
-              Something went wrong
-            </h1>
+          <h1 className="mt-3 text-lg font-bold text-gray-900">
+            Something went wrong
+          </h1>
 
-            <p className="mt-1 text-xs text-gray-500">{error}</p>
+          <p className="mt-1 text-xs text-gray-500">{error}</p>
 
-            <Link
-              to="/products"
-              className="mt-5 inline-flex h-9 items-center rounded-lg bg-gray-900 px-4 text-xs font-semibold text-white transition hover:bg-black"
-            >
-              Back to Products
-            </Link>
-          </div>
+          <Link
+            to="/products"
+            className="mt-5 inline-flex h-10 items-center rounded-lg bg-gray-900 px-5 text-xs font-semibold text-white transition hover:bg-black"
+          >
+            Back to Products
+          </Link>
         </div>
       </div>
     );
   }
+
+  /* ============================================================
+     PRODUCT NOT FOUND
+  ============================================================ */
 
   if (!product) {
     return (
-      <div className="min-h-[500px] bg-[#f7f7f7]">
-        <div className="mx-auto flex min-h-[500px] w-full max-w-[1200px] items-center justify-center px-4">
-          <div className="text-center">
-            <div className="text-5xl">🔍</div>
+      <div className="flex min-h-[600px] items-center justify-center bg-[#f7f7f7] px-4">
+        <div className="text-center">
+          <div className="text-5xl">🔍</div>
 
-            <h1 className="mt-4 text-lg font-bold text-gray-900">
-              Product Not Found
-            </h1>
+          <h1 className="mt-4 text-lg font-bold text-gray-900">
+            Product Not Found
+          </h1>
 
-            <p className="mt-1 text-xs text-gray-500">
-              The product you're looking for does not exist.
-            </p>
+          <p className="mt-1 text-xs text-gray-500">
+            The product you're looking for does not exist.
+          </p>
 
-            <Link
-              to="/products"
-              className="mt-5 inline-flex h-9 items-center rounded-lg bg-gray-900 px-4 text-xs font-semibold text-white transition hover:bg-black"
-            >
-              Back to Products
-            </Link>
-          </div>
+          <Link
+            to="/products"
+            className="mt-5 inline-flex h-10 items-center rounded-lg bg-gray-900 px-5 text-xs font-semibold text-white transition hover:bg-black"
+          >
+            Back to Products
+          </Link>
         </div>
       </div>
     );
   }
+
+  /* ============================================================
+     MAIN
+  ============================================================ */
 
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-6">
-        {/* Breadcrumb */}
-        <div className="mb-5 flex items-center gap-2 text-[11px]">
-          <Link to="/" className="text-gray-400 transition hover:text-gray-900">
+        {/* ======================================================
+            BREADCRUMB
+        ====================================================== */}
+
+        <div className="mb-5 flex items-center gap-2 overflow-hidden text-[11px]">
+          <Link
+            to="/"
+            className="shrink-0 text-gray-400 transition hover:text-gray-900"
+          >
             Home
           </Link>
 
-          <span className="text-gray-300">/</span>
+          <span className="shrink-0 text-gray-300">/</span>
 
           <Link
             to="/products"
-            className="text-gray-400 transition hover:text-gray-900"
+            className="shrink-0 text-gray-400 transition hover:text-gray-900"
           >
             Products
           </Link>
 
-          <span className="text-gray-300">/</span>
+          <span className="shrink-0 text-gray-300">/</span>
 
           <span className="truncate font-medium text-gray-700">
             {product.title}
           </span>
         </div>
 
-        {/* ================================================== */}
-        {/* PRODUCT DETAIL */}
-        {/* ================================================== */}
+        {/* ======================================================
+            PRODUCT DETAIL
+        ====================================================== */}
 
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
-          {/* ================================================== */}
-          {/* LEFT - PRODUCT INFORMATION */}
-          {/* ================================================== */}
+          {/* ====================================================
+              LEFT COLUMN
+          ==================================================== */}
 
-          <div className="min-w-0 space-y-0 rounded-xl border border-gray-200 bg-white px-5">
-            <ProductDetailHeader product={product} />
+          <div className="min-w-0 space-y-5">
+            {/* Product images */}
+            <ProductGallery product={product} />
 
-            <ProductTechnicalInfo product={product} />
+            {/* Product information */}
+            <div className="rounded-xl border border-gray-200 bg-white px-5">
+              <ProductDetailHeader product={product} />
 
-            <ProductDescription product={product} />
+              <ProductTechnicalInfo product={product} />
+
+              <ProductDescription product={product} />
+            </div>
           </div>
 
-          {/* ================================================== */}
-          {/* RIGHT - PURCHASE AREA */}
-          {/* ================================================== */}
+          {/* ====================================================
+              RIGHT COLUMN
+          ==================================================== */}
 
           <div className="min-w-0 space-y-4">
+            {/* Product options */}
             <ProductOptions
               product={product}
               selectedColor={selectedColor}
@@ -169,15 +211,19 @@ const ProductDetailPage = () => {
               onVersionChange={setSelectedVersion}
             />
 
+            {/* Promotions */}
             <ProductPromotion product={product} />
 
+            {/* Payment */}
             <ProductPayment
               selectedPayment={selectedPayment}
               onPaymentChange={setSelectedPayment}
             />
 
+            {/* Gifts */}
             <ProductGifts product={product} />
 
+            {/* Actions */}
             <ProductActions
               product={product}
               quantity={quantity}
@@ -186,21 +232,21 @@ const ProductDetailPage = () => {
           </div>
         </div>
 
-        {/* ================================================== */}
-        {/* RELATED PRODUCTS */}
-        {/* ================================================== */}
+        {/* ======================================================
+            RELATED PRODUCTS
+        ====================================================== */}
 
-        <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5">
+        <section className="mt-6 rounded-xl border border-gray-200 bg-white px-5">
           <RelatedProducts products={products} currentProduct={product} />
-        </div>
+        </section>
 
-        {/* ================================================== */}
-        {/* REVIEWS */}
-        {/* ================================================== */}
+        {/* ======================================================
+            REVIEWS
+        ====================================================== */}
 
-        <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5">
+        <section className="mt-6 rounded-xl border border-gray-200 bg-white px-5">
           <ProductReviews product={product} />
-        </div>
+        </section>
       </div>
     </div>
   );

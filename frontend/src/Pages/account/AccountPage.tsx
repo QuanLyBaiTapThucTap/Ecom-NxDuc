@@ -1,5 +1,5 @@
 import AccountSidebar from "./_components/AccountSidebar";
-import ProfileForm from "./_components/ProfileForm";
+import { Outlet } from "react-router-dom";
 
 const AccountPage = () => {
   return (
@@ -9,7 +9,7 @@ const AccountPage = () => {
         <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
           <AccountSidebar />
 
-          <ProfileForm />
+          <Outlet />
         </div>
       </div>
     </div>

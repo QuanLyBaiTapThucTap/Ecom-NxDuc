@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
+import { useAuth } from "../useAuth";
+
 interface FormErrors {
   email?: string;
   password?: string;
@@ -7,9 +12,13 @@ interface FormErrors {
 }
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
@@ -23,8 +32,6 @@ const LoginForm = () => {
 
     if (!trimmedEmail) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      newErrors.email = "Please enter a valid email address";
     }
 
     if (!password) {
@@ -39,44 +46,63 @@ const LoginForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Reset general error
     setErrors({});
 
-    // Validate
     const validationErrors = validateForm();
 
     if (validationErrors.email || validationErrors.password) {
       setErrors(validationErrors);
+
+      toast.error("Please check your information");
+
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      const loginData = {
-        email: email.trim(),
+      const loggedInUser = await login({
+        username: email.trim(),
         password,
         remember,
-      };
+      });
 
-      console.log("Login data:", loginData);
+      toast.success("Login successful!", {
+        description: "Welcome back!",
+      });
 
-      /*
-       * Sau này gọi API ở đây:
-       *
-       * await authService.login({
-       *   email: email.trim(),
-       *   password,
-       * });
-       */
+      if (loggedInUser.role === "admin") {
+        navigate("/admin/dashboard", {
+          replace: true,
+        });
+      } else {
+        const from = location.state?.from;
+
+        const redirectPath =
+          typeof from === "string" &&
+          from.startsWith("/") &&
+          !from.startsWith("//")
+            ? from
+            : "/account";
+
+        navigate(redirectPath, {
+          replace: true,
+        });
+      }
     } catch (error) {
       console.error("Login error:", error);
 
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.";
+
       setErrors({
-        general:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
+        general: message,
+      });
+
+      toast.error("Login failed", {
+        description: message,
       });
     } finally {
       setIsSubmitting(false);
@@ -109,18 +135,19 @@ const LoginForm = () => {
 
   return (
     <div className="w-full max-w-[460px]">
+      {" "}
       <div className="rounded-2xl border border-gray-200 bg-white px-6 py-8 shadow-sm sm:px-10">
-        {/* HEADER */}
+        {/* HEADER */}{" "}
         <div className="mb-8 text-center">
+          {" "}
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Welcome Back
+            Welcome Back{" "}
           </h1>
-
+          ```
           <p className="mt-2 text-sm text-gray-500">
             Sign in to your account to continue
           </p>
         </div>
-
         {/* GENERAL ERROR */}
         {errors.general && (
           <div
@@ -130,7 +157,6 @@ const LoginForm = () => {
             {errors.general}
           </div>
         )}
-
         {/* FORM */}
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           {/* EMAIL */}
@@ -145,10 +171,10 @@ const LoginForm = () => {
             <input
               id="email"
               name="email"
-              type="email"
+              type="text"
               value={email}
               onChange={handleEmailChange}
-              placeholder="Enter your email"
+              placeholder="Enter your email or username"
               autoComplete="email"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "email-error" : undefined}
@@ -159,7 +185,6 @@ const LoginForm = () => {
               }`}
             />
 
-            {/* EMAIL ERROR */}
             <div className="min-h-[20px]">
               {errors.email && (
                 <p
@@ -175,7 +200,6 @@ const LoginForm = () => {
 
           {/* PASSWORD */}
           <div className="space-y-2">
-            {/* PASSWORD LABEL + FORGOT */}
             <div className="flex h-5 items-center justify-between">
               <label
                 htmlFor="password"
@@ -186,13 +210,13 @@ const LoginForm = () => {
 
               <button
                 type="button"
+                onClick={() => navigate("/contact")}
                 className="text-xs font-medium leading-5 text-gray-600 transition hover:text-black hover:underline"
               >
-                Forgot password?
+                Contact support
               </button>
             </div>
 
-            {/* PASSWORD INPUT */}
             <div className="relative">
               <input
                 id="password"
@@ -222,7 +246,6 @@ const LoginForm = () => {
               </button>
             </div>
 
-            {/* PASSWORD ERROR */}
             <div className="min-h-[20px]">
               {errors.password && (
                 <p
@@ -264,14 +287,15 @@ const LoginForm = () => {
             {isSubmitting ? "Signing in..." : "Sign In"}
           </button>
         </form>
-
         {/* REGISTER */}
         <div className="mt-7 text-center text-sm text-gray-500">
           Don't have an account?{" "}
           <button
             type="button"
             onClick={() => {
-              window.location.href = "/register";
+              navigate("/register", {
+                state: location.state,
+              });
             }}
             className="font-semibold text-gray-900 underline underline-offset-4 transition hover:text-gray-500"
           >

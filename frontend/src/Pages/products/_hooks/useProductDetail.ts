@@ -1,59 +1,38 @@
-import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
-import { useProducts } from "./useProducts";
-import { productDetails } from "../_utils/productDetails";
+import { useEffect, useState } from "react";
+import { productService } from "../_services/productService";
+import type { Product } from "../_types/product";
 
 export const useProductDetail = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { products, loading, error } = useProducts();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const product = useMemo(() => {
-    if (!id || products.length === 0) {
-      return null;
-    }
-
+  useEffect(() => {
     const productId = Number(id);
-
-    if (Number.isNaN(productId)) {
-      return null;
+    if (!id || Number.isNaN(productId)) {
+      Promise.resolve().then(() => {
+        setProduct(null);
+        setLoading(false);
+      });
+      return;
     }
 
-    const baseProduct = products.find((item) => item.id === productId);
-
-    if (!baseProduct) {
-      return null;
-    }
-
-    const detail = productDetails[productId] ?? {};
-
-    return {
-      ...baseProduct,
-      ...detail,
-
-      images:
-        detail.images && detail.images.length > 0
-          ? detail.images
-          : [baseProduct.image],
-
-      oldPrice: detail.oldPrice ?? Number((baseProduct.price * 1.2).toFixed(2)),
-
-      variants: detail.variants ?? {},
-
-      specifications: detail.specifications ?? [],
-
-      promotions: detail.promotions ?? [],
-
-      gifts: detail.gifts ?? [],
-
-      reviews: detail.reviews ?? [],
-
-      stock: detail.stock ?? 0,
-
-      warranty: detail.warranty ?? "12 months",
-    };
-  }, [id, products]);
+    productService
+      .getProduct(productId)
+      .then(setProduct)
+      .catch((requestError: unknown) => {
+        setError(
+          requestError instanceof Error
+            ? requestError.message
+            : "Failed to fetch product",
+        );
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
 
   return {
     product,

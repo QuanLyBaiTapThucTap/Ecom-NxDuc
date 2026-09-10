@@ -23,9 +23,7 @@ const BestSeller = () => {
     }
 
     return products.filter((product) =>
-      product.category.name
-        .toLowerCase()
-        .includes(activeCategory.toLowerCase()),
+      product.category.toLowerCase().includes(activeCategory.toLowerCase()),
     );
   }, [products, activeCategory]);
 
