@@ -43,8 +43,27 @@ const HeaderActions = () => {
         </span>
       </Link>
 
-      {/* LOGOUT */}
-      {user && (
+      {/* ADMIN BUTTON (HIỂN THỊ TRỰC TIẾP KHI USER LÀ ADMIN) */}
+      {user?.role === "admin" && (
+        <Link
+          to="/admin/dashboard"
+          className="flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-black"
+        >
+          <span>⚡</span>
+          <span>Admin</span>
+        </Link>
+      )}
+
+      {/* LOGIN FOR GUEST */}
+      {!user ? (
+        <Link
+          to="/login"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:border-black hover:text-black"
+        >
+          Login
+        </Link>
+      ) : (
+        /* LOGOUT FOR LOGGED IN USERS */
         <button
           type="button"
           onClick={async () => {

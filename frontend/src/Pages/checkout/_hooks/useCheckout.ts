@@ -7,7 +7,7 @@ import {
   type CheckoutErrors,
 } from "../_schema/checkoutSchema";
 
-import { checkoutService } from "../_services/checkoutService";
+import { checkoutService, type SavedOrder } from "../_services/checkoutService";
 
 const initialForm: CheckoutFormData = {
   fullName: "",
@@ -29,6 +29,7 @@ export const useCheckout = () => {
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [createdOrder, setCreatedOrder] = useState<SavedOrder | null>(null);
   const requestId = useRef(crypto.randomUUID());
   const submitting = useRef(false);
 
@@ -55,9 +56,9 @@ export const useCheckout = () => {
     return Object.keys(validationErrors).length === 0;
   };
 
-  const submitOrder = async (order: CheckoutOrder) => {
+  const submitOrder = async (order: CheckoutOrder): Promise<SavedOrder | null> => {
     if (submitting.current || !validate()) {
-      return false;
+      return null;
     }
 
     try {
@@ -65,14 +66,15 @@ export const useCheckout = () => {
       setIsSubmitting(true);
       setSubmitError("");
 
-      await checkoutService.createOrder(order, requestId.current);
+      const saved = await checkoutService.createOrder(order, requestId.current);
 
+      setCreatedOrder(saved);
       setIsSuccess(true);
 
-      return true;
+      return saved;
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Unable to place order.");
-      return false;
+      return null;
     } finally {
       submitting.current = false;
       setIsSubmitting(false);
@@ -88,6 +90,7 @@ export const useCheckout = () => {
     isSubmitting,
     isSuccess,
     submitError,
+    createdOrder,
     updateField,
     submitOrder,
   };

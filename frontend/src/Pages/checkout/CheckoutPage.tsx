@@ -4,8 +4,6 @@ import { toast } from "sonner";
 
 import { analyticsService } from "@/Services/analyticsService";
 
-import { orderService } from "./_services/orderService";
-
 import CheckoutHeader from "./_components/CheckoutHeader";
 import ShippingForm from "./_components/ShippingForm";
 import PaymentMethod from "./_components/PaymentMethod";
@@ -148,34 +146,20 @@ const CheckoutPage = () => {
     // SUBMIT CHECKOUT
     // =======================================================
 
-    const success = await submitOrder(checkoutOrder);
+    const savedOrder = await submitOrder(checkoutOrder);
 
     // Validate thất bại
-    if (!success) {
+    if (!savedOrder) {
       return;
     }
-
-    // =======================================================
-    // CREATE ORDER
-    // =======================================================
-
-    const createdOrder = orderService.createOrder({
-      products: cartItems.map((item) => ({
-        product: item.product,
-        quantity: item.quantity,
-      })),
-
-      discount,
-      shipping: shippingFee,
-    });
 
     // =======================================================
     // ANALYTICS
     // =======================================================
 
     analyticsService.track("ORDER_CREATED", {
-      orderId: createdOrder.id,
-      orderTotal: createdOrder.total,
+      orderId: String(savedOrder.id),
+      orderTotal: savedOrder.total,
     });
 
     // =======================================================
@@ -191,7 +175,7 @@ const CheckoutPage = () => {
     // =======================================================
 
     toast.success("Order placed successfully!", {
-      description: `Order ${createdOrder.id} has been created.`,
+      description: `Order #${savedOrder.id} has been created.`,
     });
   };
 

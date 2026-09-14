@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import CartItem from "./_components/CartItem";
 import CartSummary from "./_components/CartSummary";
@@ -15,6 +16,10 @@ const CartPage = () => {
     shipping,
     total,
     allSelected,
+    voucher,
+    appliedVoucher,
+    setVoucher,
+    applyVoucher,
     toggleItem: handleToggle,
     increaseQuantity: handleIncrease,
     decreaseQuantity: handleDecrease,
@@ -124,12 +129,18 @@ const CartPage = () => {
                 discount={discount}
                 shipping={shipping}
                 total={total}
-                voucher="SAVE10"
-                appliedVoucher="SAVE10"
+                voucher={voucher}
+                appliedVoucher={appliedVoucher}
                 selectedQuantity={selectedQuantity}
-                setVoucher={() => {}}
-                applyVoucher={() => {}}
-                onCheckout={() => navigate("/checkout")}
+                setVoucher={setVoucher}
+                applyVoucher={applyVoucher}
+                onCheckout={() => {
+                  if (selectedQuantity === 0) {
+                    toast.error("Please select at least one item to proceed to checkout.");
+                    return;
+                  }
+                  navigate("/checkout");
+                }}
               />
             </div>
           </div>

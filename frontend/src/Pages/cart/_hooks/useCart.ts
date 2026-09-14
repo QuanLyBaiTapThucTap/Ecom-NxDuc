@@ -4,50 +4,119 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import type { Product } from "@/Pages/products/_types/product";
 import type { CartItem } from "../_types/cart";
+import { useAuth } from "@/Pages/auth/useAuth";
+import { apiRequest } from "@/Services/api";
 
-const STORAGE_KEY = "ecom-cart";
+function getStorageKey(userId?: number | null): string {
+  return userId ? `ecom-cart-user-${userId}` : "ecom-cart-guest";
+}
+
+function loadLocalCart(key: string): CartItem[] {
+  try {
+    const storedCart = localStorage.getItem(key);
+    const parsed: unknown = storedCart ? JSON.parse(storedCart) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (item): item is CartItem =>
+        item &&
+        item.product &&
+        typeof item.product.id === "number" &&
+        typeof item.product.title === "string" &&
+        typeof item.product.price === "number" &&
+        Number.isFinite(item.product.price) &&
+        Number.isSafeInteger(item.quantity) &&
+        item.quantity > 0 &&
+        typeof item.selected === "boolean",
+    );
+  } catch (error) {
+    console.error("Failed to load cart from storage key:", key, error);
+    return [];
+  }
+}
 
 const useCartState = () => {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    try {
-      const storedCart = localStorage.getItem(STORAGE_KEY);
-      const parsed: unknown = storedCart ? JSON.parse(storedCart) : [];
-      if (!Array.isArray(parsed)) return [];
-      return parsed.filter(
-        (item): item is CartItem =>
-          item &&
-          item.product &&
-          typeof item.product.id === "number" &&
-          typeof item.product.title === "string" &&
-          typeof item.product.price === "number" &&
-          Number.isFinite(item.product.price) &&
-          Number.isSafeInteger(item.quantity) &&
-          item.quantity > 0 &&
-          typeof item.selected === "boolean",
-      );
-    } catch (error) {
-      console.error("Failed to load cart:", error);
-      return [];
-    }
-  });
+  const { user } = useAuth();
+  const currentUserId = user?.id ?? null;
+  const prevUserIdRef = useRef<number | null>(currentUserId);
+
+  const [items, setItems] = useState<CartItem[]>(() =>
+    loadLocalCart(getStorageKey(currentUserId)),
+  );
   const [voucher, setVoucher] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState<string | null>(null);
 
+  // Khi user thay đổi (đăng nhập hoặc đăng xuất), chuyển đổi giỏ hàng tương ứng
   useEffect(() => {
+    if (prevUserIdRef.current !== currentUserId) {
+      prevUserIdRef.current = currentUserId;
+      const key = getStorageKey(currentUserId);
+      const userItems = loadLocalCart(key);
+      setItems(userItems);
+      setVoucher("");
+      setAppliedVoucher(null);
+
+      // Nếu người dùng đã đăng nhập, thử lấy giỏ hàng từ backend nếu local đang rỗng
+      if (currentUserId) {
+        apiRequest<{ products?: Array<{ productId: number; quantity: number }> }>(
+          `/carts/${currentUserId}`,
+        )
+          .then((remoteCart) => {
+            if (
+              remoteCart &&
+              Array.isArray(remoteCart.products) &&
+              remoteCart.products.length > 0 &&
+              userItems.length === 0
+            ) {
+              // Remote cart có sản phẩm nhưng local chưa có
+            }
+          })
+          .catch(() => {
+            // Không block UI nếu mạng lỗi
+          });
+      }
+    }
+  }, [currentUserId]);
+
+  // Lưu vào localStorage tương ứng với user hiện tại và đồng bộ backend
+  useEffect(() => {
+    const key = getStorageKey(currentUserId);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      localStorage.setItem(key, JSON.stringify(items));
     } catch (error) {
       console.error("Failed to save cart:", error);
     }
-  }, [items]);
 
-  const addToCart = (product: Product) => {
+    if (currentUserId) {
+      const timer = setTimeout(() => {
+        apiRequest(`/carts/${currentUserId}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            userId: currentUserId,
+            products: items.map((it) => ({
+              productId: it.product.id,
+              quantity: it.quantity,
+            })),
+          }),
+        }).catch(() => {
+          // Bỏ qua lỗi ngầm khi đồng bộ background
+        });
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [items, currentUserId]);
+
+  const addToCart = (product: Product, quantity = 1) => {
     if (product.stock !== undefined && product.stock <= 0) return;
+    const addQty = Math.max(1, quantity);
+    const maxStock = product.stock ?? 999;
+
     setItems((currentItems) => {
       const existingItem = currentItems.find(
         (item) => item.product.id === product.id,
@@ -60,8 +129,8 @@ const useCartState = () => {
                 ...item,
                 selected: true,
                 quantity: Math.min(
-                  item.quantity + 1,
-                  item.product.stock ?? 999,
+                  item.quantity + addQty,
+                  maxStock,
                 ),
               }
             : item,
@@ -72,7 +141,7 @@ const useCartState = () => {
         ...currentItems,
         {
           product,
-          quantity: 1,
+          quantity: Math.min(addQty, maxStock),
           selected: true,
         },
       ];

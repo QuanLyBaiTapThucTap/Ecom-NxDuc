@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { analyticsService } from "@/Services/analyticsService";
 import type { Product } from "../_types/product";
 import { useCart } from "@/Pages/cart/_hooks/useCart";
+import { animateProductToCart } from "@/Pages/cart/_utils/cartAnimation";
 
 interface ProductActionsProps {
   product: Product;
@@ -38,18 +39,18 @@ const ProductActions = ({
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e?: React.MouseEvent<HTMLButtonElement>) => {
     if (isOutOfStock) {
       return;
     }
 
-    for (let index = 0; index < quantity; index += 1) {
-      addToCart(product);
+    addToCart(product, quantity);
 
-      analyticsService.track("ADD_TO_CART", {
-        productId: product.id,
-      });
-    }
+    analyticsService.track("ADD_TO_CART", {
+      productId: product.id,
+    });
+
+    animateProductToCart(product.image, e?.currentTarget);
 
     setAddedToCart(true);
 
@@ -63,13 +64,11 @@ const ProductActions = ({
       return;
     }
 
-    for (let index = 0; index < quantity; index += 1) {
-      addToCart(product);
+    addToCart(product, quantity);
 
-      analyticsService.track("ADD_TO_CART", {
-        productId: product.id,
-      });
-    }
+    analyticsService.track("ADD_TO_CART", {
+      productId: product.id,
+    });
 
     navigate("/cart");
   };
