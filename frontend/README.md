@@ -44,6 +44,24 @@ export default defineConfig([
 
 ```
 
+## Deploy lên Vercel
+
+Trong Vercel, import repository này và đặt **Root Directory** là `frontend`.
+Vercel sẽ tự chạy cấu hình trong [`vercel.json`](./vercel.json), build bằng
+`npm run build` và phục vụ thư mục `dist`. Rewrite SPA đã được cấu hình để các
+route như `/products/1` hoặc `/account` không trả về lỗi 404 khi tải trực tiếp.
+
+Thêm biến môi trường sau trong Vercel (Production, Preview và Development nếu
+cần):
+
+```env
+VITE_API_URL=https://<backend-render-service>.onrender.com
+```
+
+`VITE_API_URL` phải là URL public của backend và không có dấu `/` ở cuối. Nếu
+chưa deploy backend, frontend vẫn build được nhưng các chức năng sản phẩm,
+đăng nhập, checkout và liên hệ sẽ không gọi được API production.
+
 You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
