@@ -1,0 +1,147 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "requestId": "05a6b1b7-d18d-497f-9963-191ce70ff094",
+    "items": [
+      {
+        "productId": 1,
+        "title": "MacBook Air M2 13-inch",
+        "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&h=800&q=85&sig=1-1",
+        "price": 999,
+        "quantity": 6
+      },
+      {
+        "productId": 16,
+        "title": "Sony WH-1000XM6",
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&h=800&q=85&sig=16-1",
+        "price": 449,
+        "quantity": 4
+      }
+    ],
+    "shipping": {
+      "fullName": "anh nguyễn",
+      "phone": "0327498192",
+      "email": "ducn59595959@gmail.com",
+      "address": "Cấn Thượng, Kiều Phú",
+      "city": "Hanoi",
+      "district": "Hoang Mai",
+      "note": "ok em"
+    },
+    "paymentMethod": "cod",
+    "status": "pending",
+    "paymentStatus": "unpaid",
+    "subtotal": 7790,
+    "discount": 0,
+    "shippingFee": 0,
+    "total": 7790,
+    "createdAt": "2026-09-10T04:32:03.562Z"
+  },
+  {
+    "id": 2,
+    "userId": 2,
+    "requestId": "b7dfd44d-8b73-408c-b518-6c168ad91732",
+    "items": [
+      {
+        "productId": 2,
+        "title": "Samsung Galaxy S25 5G",
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&h=800&q=85&sig=2-1",
+        "price": 799,
+        "quantity": 1
+      }
+    ],
+    "shipping": {
+      "fullName": "anh nguyễnsds",
+      "phone": "0327498192",
+      "email": "ducn59595959@gmail.com",
+      "address": "Cấn Thượng, Kiều Phú",
+      "city": "Hanoi",
+      "district": "Hoang Mai",
+      "note": ""
+    },
+    "paymentMethod": "cod",
+    "status": "pending",
+    "paymentStatus": "unpaid",
+    "subtotal": 799,
+    "discount": 0,
+    "shippingFee": 0,
+    "total": 799,
+    "createdAt": "2026-09-14T08:44:43.437Z"
+  },
+  {
+    "id": 3,
+    "userId": 6,
+    "requestId": "68ccc4a6-7f50-43a8-bdc0-31f5f19197bb",
+    "items": [
+      {
+        "productId": 1,
+        "title": "MacBook Air M2 13-inch",
+        "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&h=800&q=85&sig=1-1",
+        "price": 999,
+        "quantity": 1
+      },
+      {
+        "productId": 3,
+        "title": "iPhone 16 Pro Max",
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&h=800&q=85&sig=3-1",
+        "price": 1199,
+        "quantity": 1
+      },
+      {
+        "productId": 5,
+        "title": "Apple Watch Series 10",
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&h=800&q=85&sig=5-1",
+        "price": 429,
+        "quantity": 1
+      }
+    ],
+    "shipping": {
+      "fullName": "anh nguyễnsdsdfgdgdfgdfgfdg",
+      "phone": "0327498192",
+      "email": "ducn59595959@gmail.com",
+      "address": "Cấn Thượng, Kiều Phú",
+      "city": "Hanoi",
+      "district": "Hoang Mai",
+      "note": ""
+    },
+    "paymentMethod": "cod",
+    "status": "pending",
+    "paymentStatus": "unpaid",
+    "subtotal": 2627,
+    "discount": 0,
+    "shippingFee": 0,
+    "total": 2627,
+    "createdAt": "2026-09-14T08:57:22.961Z"
+  },
+  {
+    "id": 4,
+    "userId": 6,
+    "requestId": "d5ab2e50-8857-4b9f-953c-20afa3151c2d",
+    "items": [
+      {
+        "productId": 2,
+        "title": "Samsung Galaxy S25 5G",
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&h=800&q=85&sig=2-1",
+        "price": 799,
+        "quantity": 1
+      }
+    ],
+    "shipping": {
+      "fullName": "Nhật Minh",
+      "phone": "0327498192",
+      "email": "nxduc.dhti17a2hn@sv.uneti.edu.vn",
+      "address": "à",
+      "city": "Hanoi",
+      "district": "Cau Giấy",
+      "note": "àd"
+    },
+    "paymentMethod": "cod",
+    "status": "pending",
+    "paymentStatus": "unpaid",
+    "subtotal": 799,
+    "discount": 0,
+    "shippingFee": 0,
+    "total": 799,
+    "createdAt": "2026-09-14T09:01:23.852Z"
+  }
+]

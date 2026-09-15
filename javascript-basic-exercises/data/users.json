@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "email": "admin@techstore.com",
+    "username": " ",
+    "password": "admin123",
+    "name": {
+      "firstname": "Nguyen",
+      "lastname": "Duc"
+    },
+    "phone": "0901234567",
+    "address": {
+      "city": "Ha Noi",
+      "street": "Cau Giay",
+      "number": 25,
+      "zipcode": "100000",
+      "geolocation": {
+        "lat": "21.0285",
+        "long": "105.8542"
+      }
+    },
+    "role": "admin",
+    "__v": 0
+  },
+  {
+    "id": 2,
+    "email": "nguyenminh@gmail.com",
+    "username": "minhnguyen",
+    "password": "123456",
+    "name": {
+      "firstname": "Nguyen",
+      "lastname": "Minh"
+    },
+    "phone": "0912345678",
+    "address": {
+      "city": "Ha Noi",
+      "street": "Tran Duy Hung",
+      "number": 128,
+      "zipcode": "100000",
+      "geolocation": {
+        "lat": "21.0085",
+        "long": "105.8042"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 3,
+    "email": "quanghuy@gmail.com",
+    "username": "quanghuy",
+    "password": "123456",
+    "name": {
+      "firstname": "Tran",
+      "lastname": "Quang Huy"
+    },
+    "phone": "0987654321",
+    "address": {
+      "city": "Ho Chi Minh",
+      "street": "Nguyen Hue",
+      "number": 45,
+      "zipcode": "700000",
+      "geolocation": {
+        "lat": "10.7769",
+        "long": "106.7009"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 4,
+    "email": "anhkhoa@gmail.com",
+    "username": "anhkhoa",
+    "password": "123456",
+    "name": {
+      "firstname": "Le",
+      "lastname": "Anh Khoa"
+    },
+    "phone": "0934567890",
+    "address": {
+      "city": "Da Nang",
+      "street": "Vo Nguyen Giap",
+      "number": 72,
+      "zipcode": "550000",
+      "geolocation": {
+        "lat": "16.0544",
+        "long": "108.2022"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 5,
+    "email": "thanhha@gmail.com",
+    "username": "thanhha",
+    "password": "123456",
+    "name": {
+      "firstname": "Pham",
+      "lastname": "Thanh Ha"
+    },
+    "phone": "0967890123",
+    "address": {
+      "city": "Hai Phong",
+      "street": "Le Hong Phong",
+      "number": 36,
+      "zipcode": "180000",
+      "geolocation": {
+        "lat": "20.8449",
+        "long": "106.6881"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 6,
+    "email": "ducmanh@gmail.com",
+    "username": "ducmanh",
+    "password": "123456",
+    "name": {
+      "firstname": "Nguyen",
+      "lastname": "Duc Manh"
+    },
+    "phone": "0978123456",
+    "address": {
+      "city": "Ha Noi",
+      "street": "Pham Van Dong",
+      "number": 215,
+      "zipcode": "100000",
+      "geolocation": {
+        "lat": "21.0467",
+        "long": "105.7821"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 7,
+    "email": "thuytien@gmail.com",
+    "username": "thuytien",
+    "password": "123456",
+    "name": {
+      "firstname": "Hoang",
+      "lastname": "Thuy Tien"
+    },
+    "phone": "0908765432",
+    "address": {
+      "city": "Can Tho",
+      "street": "30 Thang 4",
+      "number": 89,
+      "zipcode": "900000",
+      "geolocation": {
+        "lat": "10.0452",
+        "long": "105.7469"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 8,
+    "email": "tuananh@gmail.com",
+    "username": "tuananh",
+    "password": "123456",
+    "name": {
+      "firstname": "Pham",
+      "lastname": "Tuan Anh"
+    },
+    "phone": "0923456789",
+    "address": {
+      "city": "Ha Noi",
+      "street": "Lang Ha",
+      "number": 156,
+      "zipcode": "100000",
+      "geolocation": {
+        "lat": "21.0142",
+        "long": "105.8156"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 9,
+    "email": "minhchau@gmail.com",
+    "username": "minhchau",
+    "password": "123456",
+    "name": {
+      "firstname": "Do",
+      "lastname": "Minh Chau"
+    },
+    "phone": "0945678901",
+    "address": {
+      "city": "Ho Chi Minh",
+      "street": "Le Loi",
+      "number": 102,
+      "zipcode": "700000",
+      "geolocation": {
+        "lat": "10.7756",
+        "long": "106.7019"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  },
+  {
+    "id": 10,
+    "email": "hoangnam@gmail.com",
+    "username": "hoangnam",
+    "password": "123456",
+    "name": {
+      "firstname": "Vu",
+      "lastname": "Hoang Nam"
+    },
+    "phone": "0981234567",
+    "address": {
+      "city": "Hai Phong",
+      "street": "Le Loi",
+      "number": 67,
+      "zipcode": "180000",
+      "geolocation": {
+        "lat": "20.8561",
+        "long": "106.6822"
+      }
+    },
+    "role": "customer",
+    "__v": 0
+  }
+]
