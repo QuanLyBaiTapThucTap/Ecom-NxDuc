@@ -5,7 +5,6 @@ import TrendingSearch from "@/Pages/home/_components/TrendingSearch";
 import PreOrderBanner from "@/Pages/home/_components/PreOrderBanner";
 import PopularBrands from "@/Pages/home/_components/PopularBrands";
 import BlogSection from "@/Pages/home/_components/BlogSection";
-import Newsletter from "@/Pages/home/_components/Newsletter";
 import ServiceFeatures from "@/Pages/home/_components/ServiceFeatures";
 import SectionCarousel from "@/Pages/home/_components/SectionCarousel";
 import ProductShowcase from "@/Pages/home/_components/ProductShowcase";
