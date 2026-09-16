@@ -24,6 +24,9 @@ import AdminLayout from "@/Layouts/AdminLayout";
 import AdminDashboardPage from "@/Pages/admin/dashboard/AdminDashboardPage";
 import AnalyticsTracker from "@/Components/AnalyticsTracker";
 import AdminOrdersPage from "@/Pages/admin/orders/AdminOrdersPage";
+import AdminProductsPage from "@/Pages/admin/products/AdminProductsPage";
+import AdminUsersPage from "@/Pages/admin/users/AdminUsersPage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -71,12 +74,12 @@ function App() {
 
                   <Route
                     path="/admin/products"
-                    element={<div>Admin Products</div>}
+                    element={<AdminProductsPage />}
                   />
 
                   <Route path="/admin/orders" element={<AdminOrdersPage />} />
 
-                  <Route path="/admin/users" element={<div>Admin Users</div>} />
+                  <Route path="/admin/users" element={<AdminUsersPage />} />
                 </Route>
               </Route>
             </Routes>

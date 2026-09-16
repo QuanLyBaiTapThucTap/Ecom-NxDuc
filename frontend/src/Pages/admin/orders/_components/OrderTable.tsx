@@ -1,11 +1,11 @@
-import type { Order } from "@/Pages/checkout/_services/orderService";
+import type { AdminOrder } from "@/Pages/admin/orders/_hooks/useAdminOrders";
 
 import OrderStatusBadge from "./OrderStatusBadge";
 
 interface OrderTableProps {
-  orders: Order[];
-  onStatusChange: (orderId: string, status: Order["status"]) => void;
-  onViewDetail: (order: Order) => void;
+  orders: AdminOrder[];
+  onStatusChange: (orderId: string, status: AdminOrder["status"]) => void;
+  onViewDetail: (order: AdminOrder) => void;
 }
 
 const OrderTable = ({
@@ -142,7 +142,7 @@ const OrderTable = ({
                         onChange={(event) =>
                           onStatusChange(
                             order.id,
-                            event.target.value as Order["status"],
+                            event.target.value as AdminOrder["status"],
                           )
                         }
                         className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 outline-none transition focus:border-black"

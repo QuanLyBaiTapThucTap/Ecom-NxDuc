@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { Order } from "@/Pages/checkout/_services/orderService";
+import type { AdminOrder } from "./_hooks/useAdminOrders";
 
 import OrderDetailModal from "./_components/OrderDetailModal";
 import OrderTable from "./_components/OrderTable";
@@ -18,13 +18,13 @@ const AdminOrdersPage = () => {
     statistics,
   } = useAdminOrders();
 
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
 
   const formatPrice = (value: number) => {
     return `$${value.toFixed(2)}`;
   };
 
-  const handleStatusChange = (orderId: string, status: Order["status"]) => {
+  const handleStatusChange = (orderId: string, status: AdminOrder["status"]) => {
     updateStatus(orderId, status);
 
     // Nếu modal đang mở đúng đơn hàng vừa đổi status
@@ -139,7 +139,7 @@ const AdminOrdersPage = () => {
           <select
             value={statusFilter}
             onChange={(event) =>
-              setStatusFilter(event.target.value as Order["status"] | "all")
+              setStatusFilter(event.target.value as AdminOrder["status"] | "all")
             }
             className="h-10 rounded-lg border border-gray-200 bg-white px-4 text-xs font-medium text-gray-700 outline-none transition focus:border-black"
           >

@@ -105,7 +105,7 @@
       "note": ""
     },
     "paymentMethod": "cod",
-    "status": "pending",
+    "status": "completed",
     "paymentStatus": "unpaid",
     "subtotal": 2627,
     "discount": 0,
@@ -136,12 +136,71 @@
       "note": "àd"
     },
     "paymentMethod": "cod",
-    "status": "pending",
+    "status": "confirmed",
     "paymentStatus": "unpaid",
     "subtotal": 799,
     "discount": 0,
     "shippingFee": 0,
     "total": 799,
     "createdAt": "2026-09-14T09:01:23.852Z"
+  },
+  {
+    "id": 5,
+    "userId": 4,
+    "requestId": "cfb3b462-75e4-4c15-98bf-36c702cea076",
+    "items": [
+      {
+        "productId": 2,
+        "title": "Samsung Galaxy S25 5G",
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&h=800&q=85&sig=2-1",
+        "price": 799,
+        "quantity": 1
+      },
+      {
+        "productId": 6,
+        "title": "Samsung Galaxy Watch7",
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&h=800&q=85&sig=6-1",
+        "price": 299,
+        "quantity": 1
+      },
+      {
+        "productId": 7,
+        "title": "AirPods Pro 2",
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&h=800&q=85&sig=7-1",
+        "price": 249,
+        "quantity": 1
+      },
+      {
+        "productId": 11,
+        "title": "Kingston NV2 1TB PCIe 4.0",
+        "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&h=800&q=85&sig=11-1",
+        "price": 109,
+        "quantity": 1
+      },
+      {
+        "productId": 98,
+        "title": "Samsung T7 Shield 2TB",
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&h=800&q=85&sig=98-1",
+        "price": 169,
+        "quantity": 2
+      }
+    ],
+    "shipping": {
+      "fullName": "Nhật Minh",
+      "phone": "0327498192",
+      "email": "nxduc.dhti17a2hn@sv.uneti.edu.vn",
+      "address": "d",
+      "city": "Hanoi",
+      "district": "d",
+      "note": "d"
+    },
+    "paymentMethod": "cod",
+    "status": "confirmed",
+    "paymentStatus": "unpaid",
+    "subtotal": 1794,
+    "discount": 0,
+    "shippingFee": 0,
+    "total": 1794,
+    "createdAt": "2026-09-16T03:18:55.756Z"
   }
 ]

@@ -1,9 +1,9 @@
-import type { Order } from "@/Pages/checkout/_services/orderService";
+import type { AdminOrder } from "@/Pages/admin/orders/_hooks/useAdminOrders";
 
 import OrderStatusBadge from "./OrderStatusBadge";
 
 interface OrderDetailModalProps {
-  order: Order | null;
+  order: AdminOrder | null;
   onClose: () => void;
 }
 
@@ -82,10 +82,25 @@ const OrderDetailModal = ({ order, onClose }: OrderDetailModalProps) => {
               </p>
 
               <p className="mt-1 text-xs font-semibold text-gray-900">
-                {order.customerId ?? "Guest"}
+                {order.customerId ?? order.userId ?? "Guest"}
               </p>
             </div>
           </div>
+
+          {typeof order.shipping === "object" && order.shipping !== null && (
+            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="text-sm font-bold text-gray-900">Shipping address</p>
+              <p className="mt-2 text-xs text-gray-600">
+                {order.shipping.fullName} • {order.shipping.phone}
+              </p>
+              <p className="text-xs text-gray-500">
+                {order.shipping.address}, {order.shipping.district}, {order.shipping.city}
+              </p>
+              {order.shipping.email && (
+                <p className="mt-1 text-[11px] text-gray-500">{order.shipping.email}</p>
+              )}
+            </div>
+          )}
 
           {/* Products */}
           <div className="mt-6">
@@ -119,7 +134,7 @@ const OrderDetailModal = ({ order, onClose }: OrderDetailModalProps) => {
 
                   {/* Total */}
                   <p className="shrink-0 text-sm font-bold text-gray-900">
-                    {formatPrice(item.total)}
+                    {formatPrice(item.total ?? item.price * item.quantity)}
                   </p>
                 </div>
               ))}
@@ -145,7 +160,7 @@ const OrderDetailModal = ({ order, onClose }: OrderDetailModalProps) => {
             <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
               <span>Shipping</span>
 
-              <span>{formatPrice(order.shipping)}</span>
+              <span>{formatPrice(order.shippingFee ?? 0)}</span>
             </div>
 
             <div className="my-4 border-t border-gray-200" />

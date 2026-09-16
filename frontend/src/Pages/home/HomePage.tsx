@@ -10,6 +10,7 @@ import ServiceFeatures from "@/Pages/home/_components/ServiceFeatures";
 import SectionCarousel from "@/Pages/home/_components/SectionCarousel";
 import ProductShowcase from "@/Pages/home/_components/ProductShowcase";
 import FeaturedProductShowcase from "./_components/FeaturedProductShowcase";
+import LatestNews from "./_components/LatestNews";
 const HomePage = () => {
   return (
     <>
@@ -25,6 +26,7 @@ const HomePage = () => {
         <FeaturedProductShowcase />
         <BlogSection />
         <Newsletter />
+        <LatestNews />
         <ServiceFeatures />
       </main>
     </>

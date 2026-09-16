@@ -1,34 +1,81 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-  orderService,
-  type Order,
-} from "@/Pages/checkout/_services/orderService";
+import { checkoutService } from "@/Pages/checkout/_services/checkoutService";
+
+export interface AdminOrderItem {
+  productId: number;
+  title: string;
+  image: string;
+  price: number;
+  quantity: number;
+  total?: number;
+}
+
+export interface AdminOrder {
+  id: string;
+  userId?: number;
+  requestId?: string;
+  items: AdminOrderItem[];
+  shipping: {
+    fullName: string;
+    phone: string;
+    email: string;
+    address: string;
+    city: string;
+    district: string;
+    note?: string;
+  };
+  paymentMethod?: string;
+  status: "pending" | "confirmed" | "cancelled" | "completed";
+  paymentStatus?: string;
+  subtotal: number;
+  discount: number;
+  shippingFee: number;
+  total: number;
+  createdAt: string;
+  customerId?: number;
+}
 
 const useAdminOrders = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<Order["status"] | "all">(
+  const [statusFilter, setStatusFilter] = useState<AdminOrder["status"] | "all">(
     "all",
   );
 
-  const loadOrders = useCallback(() => {
-    const data = orderService.getAllOrders();
+  const loadOrders = useCallback(async () => {
+    try {
+      const data = await checkoutService.getAllOrdersAdmin();
+      const normalized: AdminOrder[] = [...data]
+        .map((order) => ({
+          ...order,
+          id: String(order.id),
+          customerId: order.userId,
+          items: order.items.map((item) => ({
+            ...item,
+            total: item.price * item.quantity,
+          })),
+          shipping: {
+            ...order.shipping,
+            note: order.shipping?.note ?? "",
+          },
+        }))
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
-    // Đơn mới nhất lên đầu
-    setOrders(
-      [...data].sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      ),
-    );
+      setOrders(normalized);
+    } catch {
+      setOrders([]);
+    }
   }, []);
 
   useEffect(() => {
-    loadOrders();
+    void loadOrders();
 
     const handleOrdersUpdated = () => {
-      loadOrders();
+      void loadOrders();
     };
 
     window.addEventListener("orders-updated", handleOrdersUpdated);
@@ -57,8 +104,34 @@ const useAdminOrders = () => {
     });
   }, [orders, search, statusFilter]);
 
-  const updateStatus = (orderId: string, status: Order["status"]) => {
-    orderService.updateOrderStatus(orderId, status);
+  const updateStatus = async (orderId: string, status: AdminOrder["status"]) => {
+    try {
+      const updated = await checkoutService.updateOrderStatus(orderId, status);
+      if (!updated) return;
+
+      setOrders((current) =>
+        current.map((order) =>
+          order.id === orderId
+            ? {
+                ...order,
+                ...updated,
+                id: String(updated.id),
+                customerId: updated.userId,
+                items: updated.items.map((item) => ({
+                  ...item,
+                  total: item.price * item.quantity,
+                })),
+                shipping: {
+                  ...updated.shipping,
+                  note: updated.shipping?.note ?? "",
+                },
+              }
+            : order,
+        ),
+      );
+    } catch {
+      // let caller surface UI feedback if needed
+    }
   };
 
   const statistics = useMemo(() => {

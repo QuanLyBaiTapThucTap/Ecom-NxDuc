@@ -9,14 +9,29 @@ export interface OrderItem {
   total: number;
 }
 
+export interface ShippingInfo {
+  fullName: string;
+  phone: string;
+  email: string;
+  address: string;
+  city: string;
+  district: string;
+  note?: string;
+}
+
 export interface Order {
-  id: string;
+  id: string | number;
+  userId?: number;
+  requestId?: string;
   items: OrderItem[];
   subtotal: number;
   discount: number;
-  shipping: number;
+  shipping: ShippingInfo | number;
+  shippingFee: number;
   total: number;
   status: "pending" | "confirmed" | "cancelled" | "completed";
+  paymentMethod?: "cod";
+  paymentStatus?: "unpaid" | "paid";
   createdAt: string;
   customerId?: number;
 }
@@ -76,8 +91,11 @@ const createOrder = ({
     subtotal,
     discount,
     shipping,
+    shippingFee: shipping,
     total,
     status: "pending",
+    paymentMethod: "cod",
+    paymentStatus: "unpaid",
     createdAt: new Date().toISOString(),
     customerId,
   };

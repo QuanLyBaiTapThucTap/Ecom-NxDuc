@@ -2,7 +2,7 @@
   {
     "id": 1,
     "userId": 1,
-    "date": "2026-09-14T09:04:07.537Z",
+    "date": "2026-09-16T03:19:04.527Z",
     "products": [
       {
         "productId": 5,
@@ -50,17 +50,8 @@
   {
     "id": 4,
     "userId": 4,
-    "date": "2026-08-25T16:20:00.000Z",
-    "products": [
-      {
-        "productId": 10,
-        "quantity": 1
-      },
-      {
-        "productId": 15,
-        "quantity": 1
-      }
-    ],
+    "date": "2026-09-16T03:19:30.358Z",
+    "products": [],
     "__v": 0
   },
   {
