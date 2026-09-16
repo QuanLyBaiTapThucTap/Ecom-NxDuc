@@ -4,12 +4,12 @@ import BestWeeklyDeals from "@/Pages/home/_components/BestWeeklyDeals";
 import TrendingSearch from "@/Pages/home/_components/TrendingSearch";
 import PreOrderBanner from "@/Pages/home/_components/PreOrderBanner";
 import PopularBrands from "@/Pages/home/_components/PopularBrands";
-import BlogSection from "@/Pages/home/_components/BlogSection";
 import ServiceFeatures from "@/Pages/home/_components/ServiceFeatures";
 import SectionCarousel from "@/Pages/home/_components/SectionCarousel";
 import ProductShowcase from "@/Pages/home/_components/ProductShowcase";
 import FeaturedProductShowcase from "./_components/FeaturedProductShowcase";
 import LatestNews from "./_components/LatestNews";
+import Newsletter from "./_components/Newsletter";
 const HomePage = () => {
   return (
     <>
@@ -23,8 +23,8 @@ const HomePage = () => {
         <ProductShowcase />
         <PopularBrands />
         <FeaturedProductShowcase />
-        <BlogSection />
-        {/* <Newsletter /> */}
+        {/* <BlogSection /> */}
+        <Newsletter />
         <LatestNews />
         <ServiceFeatures />
       </main>
