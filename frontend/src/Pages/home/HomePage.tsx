@@ -25,7 +25,7 @@ const HomePage = () => {
         <PopularBrands />
         <FeaturedProductShowcase />
         <BlogSection />
-        <Newsletter />
+        {/* <Newsletter /> */}
         <LatestNews />
         <ServiceFeatures />
       </main>
